@@ -73,7 +73,7 @@ const MyWallet = () => {
 
   const [balance, setBalance] = useState(null);
 
-  const { user, token } = useContext(AuthContext);
+  const { user, setUser, token } = useContext(AuthContext);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -145,6 +145,7 @@ const MyWallet = () => {
     const res = await UserService.getProfile(token);
 
     if (res) {
+      setUser((prev) => ({ ...prev, balance: res.balance }));
       setBalance(res.balance);
     }
   };

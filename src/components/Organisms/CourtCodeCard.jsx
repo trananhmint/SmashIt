@@ -3,11 +3,15 @@ import React, { useContext } from "react";
 import { COLORS } from "../../theme/colors";
 import { formatNumber } from "../../utils";
 import { CourtOwnerContext } from "../../context/CourtOwnerContext";
+import { isWeekend } from "date-fns";
 
-export default function CourtCodeCard({ courtCode, pricePerHour }) {
+export default function CourtCodeCard({
+  courtCode,
+  pricePerHour,
+  chosenDate,
+  slotList,
+}) {
   const { totalSlot } = useContext(CourtOwnerContext);
-
-  console.log(totalSlot);
 
   const handleGenerateTotalSlot = () => {
     const data = totalSlot?.filter((item) => item.courtCode == courtCode);
@@ -18,17 +22,15 @@ export default function CourtCodeCard({ courtCode, pricePerHour }) {
   const countBookedSlots = () => {
     let bookedCount = 0;
 
-    const data = totalSlot?.filter((item) => item.courtCode == courtCode);
+    console.log("slotListtttt", slotList);
 
-    // data[0]?.slotWithStatusResponses?.length;
-
-    data?.forEach((response) => {
-      response.slotWithStatusResponses.forEach((slot) => {
+    slotList?.generateSlotResponseForOwner?.slotWithStatusResponsesForOwner?.forEach(
+      (slot) => {
         if (slot.isBooked) {
           bookedCount++;
         }
-      });
-    });
+      }
+    );
 
     return bookedCount;
   };
@@ -48,18 +50,20 @@ export default function CourtCodeCard({ courtCode, pricePerHour }) {
 
           <View style={[styles.inforItem]}>
             <Text style={styles.normalText}>Giá: </Text>
-            <Text style={[styles.boldText]}>{formatNumber(pricePerHour)}đ</Text>
-          </View>
-
-          <View style={styles.inforItem}>
-            <Text style={styles.normalText}>Khung giờ đã đặt </Text>
-            <Text style={[styles.boldText, { color: COLORS.orangeText }]}>
-              {0}
-              <Text style={{ color: COLORS.black }}>
-                /{0}
-              </Text>
+            <Text style={[styles.boldText]}>
+              {formatNumber(pricePerHour)}đ / giờ
             </Text>
           </View>
+
+          {/* <View style={styles.inforItem}>
+            <Text style={styles.normalText}>Khung giờ đã đặt </Text>
+            <Text style={[styles.boldText, { color: COLORS.orangeText }]}>
+              {countBookedSlots()}
+              <Text style={{ color: COLORS.black }}>
+                /{handleGenerateTotalSlot()}
+              </Text>
+            </Text>
+          </View> */}
         </View>
       </View>
     </View>

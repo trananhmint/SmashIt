@@ -68,6 +68,8 @@ const Payment = () => {
     // // },
   ];
 
+  console.log("balance", user.balance, booking.priceTotal);
+
   if (isLoading) {
     return <Loading />;
   }
@@ -227,11 +229,16 @@ const Payment = () => {
         </View>
         <TouchableOpacity
           style={styles.confirmPayment}
+          disabled={user.balance < booking.priceTotal}
           onPress={(e) => {
             handleBooking(e);
           }}
         >
-          <Text style={styles.confirmPayment_Text}>Xác nhận thanh toán</Text>
+          <Text style={styles.confirmPayment_Text}>
+            {user.balance < booking.priceTotal
+              ? "Hiện không đủ tiền trong ví"
+              : "Xác nhận thanh toán"}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
