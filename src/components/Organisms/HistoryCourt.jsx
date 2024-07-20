@@ -1,22 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 import { COLORS } from "../../theme/colors";
 import { SIZE, TYPE, WEIGHT } from "../../theme/fonts";
 import { formatNumber } from "../../utils";
+import { useNavigation } from "@react-navigation/native";
 
 const HistoryCourt = ({
+  id,
   name,
   numOfCourt,
   numOfSlot,
   bookingTime,
   price,
   paymentMethod,
+  address,
+  status
 }) => {
+  const navigation = useNavigation();
+  const [booking, setBooking] = useState({
+    bookingId : id,
+    name : name,
+    price : price,
+    numberOfCourt : numOfCourt,
+    numberOfSlot : numOfSlot,
+    bookingTime : bookingTime,
+    address : address,
+    paymentMethod : paymentMethod,
+    status: status,
+  }) 
+
+
   return (
-    <View style={styles.outline}>
+    <TouchableOpacity
+      onPress={() => {navigation.navigate("BookedDetail", {booking : booking})}} 
+      style={styles.outline}
+    >
       <View style={styles.info}>
-        <Text style={styles.info_Text}>{name}</Text>
+        <Text style={styles.info_Text}>Sân cầu lông {name}</Text>
         <View style={{flexDirection: "row", gap: 15}}>
           <View style={styles.directionRow} >
             <View style={styles.bullet} />
@@ -43,12 +64,12 @@ const HistoryCourt = ({
         </TouchableOpacity>
       </View>
       <View style={styles.payment}>
-        <Text style={[styles.info_Text, { color: COLORS.darkGreenText }]}>
+        <Text style={{ color: COLORS.darkGreenText, fontSize: SIZE.size_16, fontFamily: "quicksand-semibold"}}>
           {formatNumber(price)}đ
         </Text>
         <Text style={{fontFamily: "quicksand-regular", fontSize: SIZE.size_12}}>{paymentMethod}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

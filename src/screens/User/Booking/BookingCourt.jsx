@@ -85,7 +85,7 @@ export default function BookingCourt() {
     badmintonCourtId: badmintonCourtId,
     createBookingSlotRequests: bookingSlotList,
     priceTotal: 0,
-    date: currentDateTime, // Initial date formatting
+    date: formatDate(currentDateTime), // Initial date formatting
   });
   const numberOfCourt = [1, 2, 3, 4];
 
@@ -97,10 +97,12 @@ export default function BookingCourt() {
       }
     };
 
+    console.log("Chosen Date: ", chosenDate);
+
     const fetchGenerateSlot = async () => {
       const res = await CourtService.generateSlotByDate(
         badmintonCourtId,
-        chosenDate.toISOString(),
+        currentDateTime,
         token
       );
 
@@ -113,7 +115,7 @@ export default function BookingCourt() {
 
     fetchCourt();
     fetchGenerateSlot();
-  }, [isFocused, token, badmintonCourtId, chosenDate]);
+  }, [isFocused, token, badmintonCourtId, currentDateTime]);
 
   const calculateTotalPrice = (pricePerHour, bookingSlotList) => {
     if (pricePerHour && bookingSlotList.length > 0) {
@@ -131,9 +133,9 @@ export default function BookingCourt() {
       ...prevBooking,
       createBookingSlotRequests: bookingSlotList,
       priceTotal: total,
-      date: formatDate(chosenDate), // Update the date with formatted date
+      date: formatDate(currentDateTime), // Update the date with formatted date
     }));
-  }, [bookingSlotList, court.pricePerHour, chosenDate]);
+  }, [bookingSlotList, court.pricePerHour, currentDateTime]);
 
   const countChosenSlot = (bookingSlotList) => {
     let totalCount = 0;
@@ -220,7 +222,7 @@ export default function BookingCourt() {
               isCourtOwner={false}
               setChosenSlot={setChosenSlot}
               slotList={filterByCourtCode(courtSlot, currentCourt)}
-              chosenDate={chosenDate}
+              chosenDate={currentDateTime}
               courtId={filterByCourtCode(courtSlot, currentCourt)?.id}
               setBookingSlotList={setBookingSlotList}
             />

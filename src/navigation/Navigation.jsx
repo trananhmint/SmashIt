@@ -47,6 +47,7 @@ import ConfirmPayment from "../screens/User/Payment/ConfirmPayment";
 import MyWallet from "../screens/User/Settings/MyWallet";
 import QRCode from "../screens/User/Payment/QRCode";
 import ShareCenter from "../screens/User/Settings/ShareCenter";
+import BookedDetail from "../screens/User/Booking/BookedDetail";
 export default function Navigation() {
   const Stack = createNativeStackNavigator();
 
@@ -239,6 +240,15 @@ export default function Navigation() {
           <Stack.Screen
             name="BookedHistory"
             component={BookedHistory}
+            options={{
+              title: "",
+              animation: "slide_from_right",
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="BookedDetail"
+            component={BookedDetail}
             options={{
               title: "",
               animation: "slide_from_right",
