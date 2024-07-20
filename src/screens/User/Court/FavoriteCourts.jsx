@@ -1,5 +1,5 @@
-import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native";
 import HeaderBar from "../../../components/Atoms/HeaderBar";
 import { useNavigation } from "@react-navigation/native";
@@ -8,6 +8,8 @@ import courtImage from "../../../assets/images/courtImages.jpg";
 import images from "../../../constants/images";
 import { SIZE } from "../../../theme/fonts";
 import Oops from "../../../components/Organisms/Oops";
+import * as SecureStore from "expo-secure-store";
+import { AuthContext } from "../../../context/AuthContext";
 
 const FavoriteCourts = () => {
   const navigation = useNavigation();
@@ -20,7 +22,30 @@ const FavoriteCourts = () => {
     distance: "1.1",
     price: "89.000",
   };
-  const favoriteList = [];
+  const [favoriteList, setFavoriteList] = useState([]);
+
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    const getFavList = async () => {
+      let list = await SecureStore.getItem("favList");
+
+      list = list ? JSON.parse(list) : null;
+
+      if (list) {
+        const userFav = list.find((item) => item.userId === user?.id);
+
+        if (userFav) {
+          setFavoriteList(userFav.favCourts);
+        }
+      }
+
+      return false;
+    };
+
+    getFavList();
+  }, []);
+
   return (
     <View style={styles.container}>
       <HeaderBar
@@ -37,16 +62,23 @@ const FavoriteCourts = () => {
         <ScrollView style={styles.favoriteList}>
           {favoriteList.map((court, index) => {
             return (
-              <View key={index}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("CourtDetail", {
+                    badmintonCourtId: court.id,
+                  });
+                }}
+                key={index}
+              >
                 <FavoriteCourt
-                  courtName={court.name}
-                  courtImage={court.image}
+                  courtName={court.courtName}
+                  courtImage={courtImage}
                   courtAddress={court.address}
                   courtDistance={court.distance}
-                  courtPrice={court.price}
+                  courtPrice={court.pricePerHour}
                   isFavorite={true}
                 />
-              </View>
+              </TouchableOpacity>
             );
           })}
         </ScrollView>
@@ -57,13 +89,14 @@ const FavoriteCourts = () => {
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
-    width: "100%",
+    flex: 1,
+    backgroundColor: "white",
   },
   favoriteList: {
     display: "flex",
     flexDirection: "column",
     height: "100%",
+    marginTop: 30,
   },
 });
 

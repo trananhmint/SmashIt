@@ -26,11 +26,15 @@ import { AuthContext } from "../../../context/AuthContext";
 import { formatNumber } from "../../../utils";
 import ServiceCourtService from "../../../services/court-service.service";
 import Loading from "../../../components/Molecules/Loading";
+import * as SecureStore from "expo-secure-store";
 
 const CourtDetail = () => {
   const route = useRoute();
   const courtId = Number(route.params.badmintonCourtId);
+  const [favorite, setFavorite] = useState(true);
   const [court, setCourt] = useState({});
+
+  const { user } = useContext(AuthContext);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -51,11 +55,89 @@ const CourtDetail = () => {
     }
   };
 
+  const checkIsFav = async () => {
+    let list = await SecureStore.getItem("favList");
+
+    list = list ? JSON.parse(list) : null;
+
+    if (list?.length > 0) {
+      const userFav = list.find((item) => item.userId === user?.id);
+
+      if (userFav) {
+        const checkInList = userFav.favCourts.find(
+          (item) => item.id === courtId
+        );
+
+        if (checkInList) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  };
+
+  const addToFavList = async () => {
+    let list = await SecureStore.getItem("favList");
+
+    list = list ? JSON.parse(list) : null;
+
+    console.log("list", list);
+
+    if (list) {
+      const userIndex = list.findIndex((item) => item.userId === user.id);
+
+      if (userIndex !== -1) {
+        list[userIndex].favCourts.push(court);
+        await SecureStore.setItem("favList", JSON.stringify(list));
+      } else {
+        list.push({ userId: user.id, favCourts: [court] });
+        await SecureStore.setItem("favList", JSON.stringify(list));
+      }
+    } else {
+      await SecureStore.setItem(
+        "favList",
+        JSON.stringify([
+          {
+            userId: user.id,
+            favCourts: [court],
+          },
+        ])
+      );
+    }
+
+    setFavorite(true);
+  };
+
+  const removeFromFavList = async () => {
+    let list = await SecureStore.getItem("favList");
+
+    list = list ? JSON.parse(list) : null;
+
+    if (list) {
+      const userIndex = list.findIndex((item) => item.userId === user.id);
+
+      if (userIndex !== -1) {
+        list[userIndex].favCourts = list[userIndex].favCourts.filter((item) => {
+          return item.id !== courtId;
+        });
+
+        await SecureStore.setItem("favList", JSON.stringify(list));
+
+        setFavorite(false);
+      }
+    }
+  };
+
   useEffect(() => {
     const fetchCourt = async () => {
       const res = await CourtService.getCourtById(token, courtId);
       if (res) {
         setCourt(res);
+
+        const check = await checkIsFav();
+
+        setFavorite(check);
       } else {
         navigation.navigate("Search");
       }
@@ -95,7 +177,6 @@ const CourtDetail = () => {
 
   const courtImageList = [1, 1, 1, 1];
   const feedback = [1, 1, 1, 1, 1];
-  const [favorite, setFavorite] = useState(true);
   const heart = favorite === true ? "heart" : "hearto";
   const [step, setStep] = useState(1);
   const navigator = useNavigation();
@@ -103,6 +184,8 @@ const CourtDetail = () => {
   if (isLoading) {
     return <Loading />;
   }
+
+  console.log(favorite);
 
   return (
     <View style={{ flex: 1, marginBottom: 20 }}>
@@ -176,7 +259,14 @@ const CourtDetail = () => {
             </Text>
             <TouchableOpacity
               onPress={() => {
-                setFavorite(!favorite);
+                // setFavorite(!favorite);
+                if (!favorite) {
+                  console.log("false");
+                  addToFavList();
+                } else {
+                  console.log("true");
+                  removeFromFavList();
+                }
               }}
             >
               <VectorIcon.AntDesign name={heart} size={20} color={"red"} />

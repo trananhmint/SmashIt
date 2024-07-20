@@ -3,6 +3,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 import { SIZE, WEIGHT } from "../../theme/fonts";
 import { COLORS } from "../../theme/colors";
+import { formatNumber } from "../../utils";
 
 const FavoriteCourt = ({
   courtImage,
@@ -26,9 +27,11 @@ const FavoriteCourt = ({
           <Text style={styles.courtAddress}>{courtAddress}</Text>
         </View>
         <View style={styles.courtDistance_Price}>
-          <Text style={styles.courtDistance_Text}>{courtDistance} km</Text>
+          <Text style={styles.courtDistance_Text}>{6} km</Text>
           <View style={styles.hr} />
-          <Text style={styles.courtDistance_Text}>{courtPrice}đ</Text>
+          <Text style={styles.courtDistance_Text}>
+            {formatNumber(courtPrice)}đ
+          </Text>
           <TouchableOpacity
             onPress={() => {
               setIsFavorite(!isFavorite);

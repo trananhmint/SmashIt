@@ -49,7 +49,7 @@ export default function Settings() {
           name: "Ví của tôi",
           isNew: false,
         },
-        { navigate: "", icon: "map-pin", name: "Đã đặt trước", isNew: false },
+        // { navigate: "", icon: "map-pin", name: "Đã đặt trước", isNew: false },
         {
           navigate: "BookedHistory",
           icon: "calendar",
