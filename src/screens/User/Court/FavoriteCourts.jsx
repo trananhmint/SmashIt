@@ -26,6 +26,26 @@ const FavoriteCourts = () => {
 
   const { user } = useContext(AuthContext);
 
+  const removeFromFavList = async (courtId) => {
+    let list = await SecureStore.getItem("favList");
+
+    list = list ? JSON.parse(list) : null;
+
+    if (list) {
+      const userIndex = list.findIndex((item) => item.userId === user.id);
+
+      if (userIndex !== -1) {
+        list[userIndex].favCourts = list[userIndex].favCourts.filter((item) => {
+          return item.id !== courtId;
+        });
+
+        await SecureStore.setItem("favList", JSON.stringify(list));
+
+        setFavorite(false);
+      }
+    }
+  };
+
   useEffect(() => {
     const getFavList = async () => {
       let list = await SecureStore.getItem("favList");
@@ -44,7 +64,7 @@ const FavoriteCourts = () => {
     };
 
     getFavList();
-  }, []);
+  }, [removeFromFavList]);
 
   return (
     <View style={styles.container}>
@@ -77,6 +97,7 @@ const FavoriteCourts = () => {
                   courtDistance={court.distance}
                   courtPrice={court.pricePerHour}
                   isFavorite={true}
+                  action={() => removeFromFavList(court?.id)}
                 />
               </TouchableOpacity>
             );

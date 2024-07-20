@@ -11,6 +11,7 @@ const FavoriteCourt = ({
   courtAddress,
   courtDistance,
   courtPrice,
+  action,
 }) => {
   const [isFavorite, setIsFavorite] = useState(true);
   const isFavoriteColor = isFavorite === true ? "#EE5C37" : "white";
@@ -22,7 +23,7 @@ const FavoriteCourt = ({
         <Image style={styles.image} source={courtImage} />
       </View>
       <View style={styles.courtInfo}>
-        <Text style={styles.courtName}>{courtName}</Text>
+        <Text style={styles.courtName}>Sân {courtName}</Text>
         <View>
           <Text style={styles.courtAddress}>{courtAddress}</Text>
         </View>
@@ -34,7 +35,8 @@ const FavoriteCourt = ({
           </Text>
           <TouchableOpacity
             onPress={() => {
-              setIsFavorite(!isFavorite);
+              // setIsFavorite(!isFavorite);
+              action();
             }}
           >
             <Icon name={isFavoriteName} size={20} color={"#EE5C37"} />

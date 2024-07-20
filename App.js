@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { NativeBaseProvider } from "native-base";
-import { StyleSheet, Text, View } from "react-native";
+import { LogBox, StyleSheet, Text, View } from "react-native";
 import { LoadingProvider } from "./src/context/LoadingContext";
 import { CourtOwnerProvider } from "./src/context/CourtOwnerContext";
 import FontLoader from "./src/components/FontLoader";
@@ -10,6 +10,9 @@ import { AuthProvider } from "./src/context/AuthContext";
 import { COLORS } from "./src/theme/colors";
 
 export default function App() {
+  LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
+  LogBox.ignoreAllLogs(); //Ignore all log notifications
+
   return (
     <NativeBaseProvider>
       <LoadingProvider>

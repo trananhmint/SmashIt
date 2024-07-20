@@ -75,7 +75,7 @@ const MyWallet = () => {
 
   const { user, setUser, token } = useContext(AuthContext);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleGetIcon = (status) => {
     switch (status) {
@@ -148,6 +148,8 @@ const MyWallet = () => {
       setUser((prev) => ({ ...prev, balance: res.balance }));
       setBalance(res.balance);
     }
+
+    setIsLoading(false);
   };
 
   console.log("Balanceeeeeee", balance);
@@ -162,10 +164,11 @@ const MyWallet = () => {
         setLatestHistory(res[res.length - 1]);
         setHistory(res.slice().reverse());
       }
+
+      fetchUserWallet();
     };
 
     fetchData();
-    fetchUserWallet();
   }, []);
 
   if (isLoading) {

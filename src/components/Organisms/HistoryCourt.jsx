@@ -1,10 +1,17 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 import { COLORS } from "../../theme/colors";
 import { SIZE, TYPE, WEIGHT } from "../../theme/fonts";
 import { formatNumber } from "../../utils";
 import { useNavigation } from "@react-navigation/native";
+import { subHours } from "date-fns";
 
 const HistoryCourt = ({
   id,
@@ -15,31 +22,32 @@ const HistoryCourt = ({
   price,
   paymentMethod,
   address,
-  status
+  status,
 }) => {
   const navigation = useNavigation();
   const [booking, setBooking] = useState({
-    bookingId : id,
-    name : name,
-    price : price,
-    numberOfCourt : numOfCourt,
-    numberOfSlot : numOfSlot,
-    bookingTime : bookingTime,
-    address : address,
-    paymentMethod : paymentMethod,
+    bookingId: id,
+    name: name,
+    price: price,
+    numberOfCourt: numOfCourt,
+    numberOfSlot: numOfSlot,
+    bookingTime: bookingTime,
+    address: address,
+    paymentMethod: paymentMethod,
     status: status,
-  }) 
-
+  });
 
   return (
     <TouchableOpacity
-      onPress={() => {navigation.navigate("BookedDetail", {booking : booking})}} 
+      onPress={() => {
+        navigation.navigate("BookedDetail", { booking: booking });
+      }}
       style={styles.outline}
     >
       <View style={styles.info}>
-        <Text style={styles.info_Text}>Sân cầu lông {name}</Text>
-        <View style={{flexDirection: "row", gap: 15}}>
-          <View style={styles.directionRow} >
+        <Text style={styles.info_Text}>Sân {name}</Text>
+        <View style={{ flexDirection: "row", gap: 15 }}>
+          <View style={styles.directionRow}>
             <View style={styles.bullet} />
             <Text style={styles.info_Text}>{numOfCourt} sân</Text>
           </View>
@@ -47,14 +55,23 @@ const HistoryCourt = ({
             <View style={styles.bullet} />
             <Text style={styles.info_Text}>{numOfSlot} khung giờ</Text>
           </View>
-          
         </View>
-        <Text style={[styles.info_Text, { color: COLORS.greyText, fontFamily: "quicksand-medium" }]}>
+        <Text
+          style={[
+            styles.info_Text,
+            { color: COLORS.greyText, fontFamily: "quicksand-medium" },
+          ]}
+        >
           {bookingTime}
         </Text>
         <TouchableOpacity style={{}}>
           <View style={styles.directionRow}>
-            <Text style={[styles.info_Text, { color: COLORS.orangeText, fontSize: SIZE.size_12 }]}>
+            <Text
+              style={[
+                styles.info_Text,
+                { color: COLORS.orangeText, fontSize: SIZE.size_12 },
+              ]}
+            >
               Đặt lại
             </Text>
             <View style={styles.arrow}>
@@ -64,10 +81,20 @@ const HistoryCourt = ({
         </TouchableOpacity>
       </View>
       <View style={styles.payment}>
-        <Text style={{ color: COLORS.darkGreenText, fontSize: SIZE.size_16, fontFamily: "quicksand-semibold"}}>
+        <Text
+          style={{
+            color: COLORS.darkGreenText,
+            fontSize: SIZE.size_16,
+            fontFamily: "quicksand-semibold",
+          }}
+        >
           {formatNumber(price)}đ
         </Text>
-        <Text style={{fontFamily: "quicksand-regular", fontSize: SIZE.size_12}}>{paymentMethod}</Text>
+        <Text
+          style={{ fontFamily: "quicksand-regular", fontSize: SIZE.size_12 }}
+        >
+          {paymentMethod}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -92,7 +119,7 @@ const styles = StyleSheet.create({
   info_Text: {
     // fontFamily: TYPE.quicksand,
     fontSize: SIZE.size_14,
-    fontFamily: "quicksand-semibold"
+    fontFamily: "quicksand-semibold",
   },
   bullet: {
     height: 6,
@@ -103,7 +130,7 @@ const styles = StyleSheet.create({
   directionRow: {
     display: "flex",
     flexDirection: "row",
-    alignItems: 'center',
+    alignItems: "center",
     gap: 5,
   },
   arrow: {

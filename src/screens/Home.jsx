@@ -87,10 +87,10 @@ export default function Home() {
           </Pressable>
         </View>
       </View>
-      <View style={styles.discount}>
+      {/* <View style={styles.discount}>
         <Text style={[styles.title, { marginTop: 50 }]}>Ưu đãi hấp dẫn</Text>
-        {/* <Carousel /> */}
-      </View>
+        <Carousel />
+      </View> */}
       <View style={styles.suggest}>
         <Title_MoreInfo title={"Đề xuất dành cho bạn"} />
         <ScrollView>
@@ -169,6 +169,7 @@ const styles = StyleSheet.create({
     marginBottom: 35,
   },
   suggest: {
+    marginTop: 35,
     paddingHorizontal: 12,
     marginBottom: 30,
   },

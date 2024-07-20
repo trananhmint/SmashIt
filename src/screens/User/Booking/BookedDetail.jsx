@@ -52,29 +52,43 @@ const BookedDetail = () => {
       />
       <View style={[{ flex: 1 }, styles.container]}>
         <View style={styles.createdTime_status}>
-          <Text style={[ styles.content_SemiBold, {color: COLORS.darkGreenText}]}>{bookingInfo.status}</Text>
+          <Text
+            style={[styles.content_SemiBold, { color: COLORS.darkGreenText }]}
+          >
+            {bookingInfo.status}
+          </Text>
           <View style={styles.hr} />
-          <Text style={[ styles.content_SemiBold, {color: COLORS.darkGreenText}]}>{bookingInfo.bookingTime}</Text> 
+          <Text
+            style={[styles.content_SemiBold, { color: COLORS.darkGreenText }]}
+          >
+            {bookingInfo.bookingTime}
+          </Text>
         </View>
         <View
           style={[{ paddingHorizontal: 15, marginTop: 20 }, styles.bookingInfo]}
         >
           <View>
-            <Text style={[{fontSize: SIZE.size_14, fontFamily: "quicksand-bold"}]}>Sân cầu lông {bookingInfo.name}</Text>
+            <Text
+              style={[{ fontSize: SIZE.size_14, fontFamily: "quicksand-bold" }]}
+            >
+              Sân cầu lông {bookingInfo.name}
+            </Text>
             <Text style={styles.content}>{bookingInfo.address}</Text>
           </View>
           <View style={styles.hrHorizontal} />
           <View style={styles.bookingInfo_container}>
             <View style={styles.bookingInfo_Item}>
-              <Text style={ styles.content_SemiBold}>Mã đặt sân</Text>
+              <Text style={styles.content_SemiBold}>Mã đặt sân</Text>
               <Text>{bookingInfo.bookingId}</Text>
             </View>
             <View style={styles.bookingInfo_Item}>
-              <Text style={ styles.content_SemiBold}>Tổng tiền</Text>
+              <Text style={styles.content_SemiBold}>Tổng tiền</Text>
               <Text>{formatNumber(bookingInfo.price)} đ</Text>
             </View>
             <View style={styles.bookingInfo_Item}>
-              <Text style={ styles.content_SemiBold}>Phương thức thanh toán</Text>
+              <Text style={styles.content_SemiBold}>
+                Phương thức thanh toán
+              </Text>
               <Text>{bookingInfo.paymentMethod}</Text>
             </View>
           </View>
@@ -82,38 +96,38 @@ const BookedDetail = () => {
         <View style={styles.bookingCourt}>
           <Text style={styles.title}>Thông tin đặt sân</Text>
           <ScrollView>
-          {booking.response?.map((court) => { 
-            console.log("court", court);
-            return (
-              <View style={[styles.court]}>
-                <View style={styles.courtImage}>
-                  <Image style={styles.image} source={courtImage} />
-                </View>
-                <View style={styles.bookingInfo1}>
-                  <Text style={styles.content_SemiBold}>
-                    Sân {court.courtId}
-                  </Text>
-                  
-                  <View style={styles.time}>
-                    <Text style={styles.content}>Giờ đặt:</Text>
-                    <View style={{ width: "100%" }}>
-                      <ChipList
-                        switchColor={true}
-                        dataList={court.slots}
-                        isHorizontal={false}
-                        fontSize={SIZE.size_10}
-                        textColor={COLORS.orangeText}
-                        backgroundColor={COLORS.orangeBackground}
-                        borderRadius={10}
-                        textFamily={"quicksand-semibold"}
-                        borderColor={COLORS.white}
-                      />
+            {booking.response?.map((court) => {
+              console.log("court", court);
+              return (
+                <View style={[styles.court]}>
+                  <View style={styles.courtImage}>
+                    <Image style={styles.image} source={courtImage} />
+                  </View>
+                  <View style={styles.bookingInfo1}>
+                    <Text style={styles.content_SemiBold}>
+                      Sân 1{court.courtId}
+                    </Text>
+
+                    <View style={styles.time}>
+                      <Text style={styles.content}>Giờ đặt:</Text>
+                      <View style={{ width: "100%" }}>
+                        <ChipList
+                          switchColor={true}
+                          dataList={court.slots}
+                          isHorizontal={false}
+                          fontSize={SIZE.size_10}
+                          textColor={COLORS.orangeText}
+                          backgroundColor={COLORS.orangeBackground}
+                          borderRadius={10}
+                          textFamily={"quicksand-semibold"}
+                          borderColor={COLORS.white}
+                        />
+                      </View>
                     </View>
                   </View>
                 </View>
-              </View>
-            );
-          })}
+              );
+            })}
           </ScrollView>
         </View>
       </View>

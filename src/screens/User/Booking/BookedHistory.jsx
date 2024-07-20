@@ -19,6 +19,8 @@ import images from "../../../constants/images";
 import BookingService from "../../../services/booking.service";
 import { AuthContext } from "../../../context/AuthContext";
 import { formatDate } from "../../../utils";
+import moment from "moment";
+import { subHours } from "date-fns";
 
 const BookedHistory = () => {
   const [bookedHistory, setBookedHistory] = useState([]);
@@ -46,7 +48,7 @@ const BookedHistory = () => {
   const fetchBookedHistory = async () => {
     const res = await BookingService.getAllBookingsByUser(token);
     if (res) {
-      setBookedHistory(res);
+      setBookedHistory(res.reverse());
     }
 
     // console.log("getAllBookingsByUser", res);
@@ -54,36 +56,38 @@ const BookedHistory = () => {
   const fetchReserve = async () => {
     const res = await BookingService.getReserveBooking(token);
     if (res) {
-      setReserveCourts(res);
+      setReserveCourts(res.reverse());
+      await fetchBookedHistory();
     }
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchBookedHistory();
-      fetchReserve();
-    }, [token])
-  );
+  useEffect(() => {
+    fetchReserve();
+  }, [tab]);
 
+  const editTime = (time) => {
+    let temp = subHours(time, 7);
 
+    return temp;
+  };
 
   const Reserve = () => {
     return reserveCourts?.map((court, index) => {
       return (
-          <View key={index}>
-            <HistoryCourt
-              id={court.id}
-              name={court.badmintonCourtName}
-              numOfCourt={court.numberOfCourt}
-              numOfSlot={court.numOfSlot}
-              bookingTime={formatDate(court.dateTime)}
-              price={court.price}
-              paymentMethod={"Ví Smash It"}
-              address={court.badmintonCourtLocation}
-              status={court.status}
-            />
-            <View style={styles.hr} />
-          </View>
+        <View key={index}>
+          <HistoryCourt
+            id={court?.id}
+            name={court?.badmintonCourtName}
+            numOfCourt={court?.numberOfCourt}
+            numOfSlot={court?.numberOfSlots}
+            bookingTime={moment(court?.dateTime).format("DD/MM/YYYY")}
+            price={court?.price}
+            paymentMethod={"Ví Smash It"}
+            address={court?.badmintonCourtLocation}
+            status={court?.status}
+          />
+          <View style={styles.hr} />
+        </View>
       );
     });
   };
@@ -93,21 +97,25 @@ const BookedHistory = () => {
       return (
         <View key={index}>
           <HistoryCourt
-            id={court.id}
-            name={court.badmintonCourtName}
-            address={court.badmintonCourtLocation}
-            numOfCourt={court.numberOfCourt}
-            numOfSlot={court.numOfSlot}
-            bookingTime={formatDate(court.dateTime)}
-            price={court.price}
+            id={court?.id}
+            name={court?.badmintonCourtName}
+            address={court?.badmintonCourtLocation}
+            numOfCourt={court?.numberOfCourt}
+            numOfSlot={court?.numberOfSlots}
+            bookingTime={moment(court?.dateTime).format("DD/MM/YYYY")}
+            price={court?.price}
             paymentMethod={"Ví Smash It"}
-            status={court.status}
+            status={court?.status}
           />
           <View style={styles.hr} />
         </View>
       );
     });
   };
+
+  console.log("reserveCourts", reserveCourts);
+  console.log("History", bookedHistory);
+
   const tabItems = [
     {
       id: 1,
@@ -133,6 +141,7 @@ const BookedHistory = () => {
           fontSize={SIZE.size_14}
           setTab={setTab}
           currentTab={tab}
+          tabBarStyle={{ justifyContent: "space-around" }}
         />
       </View>
       <ScrollView style={styles.bookedCourt}>
