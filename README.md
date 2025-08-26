@@ -9,7 +9,6 @@ Players can easily book courts, court owners can track revenue, and administrato
 - **Name:** Smash It  
 - **Timeline:** May – Dec 2024  
 - **Team size:** 4  
-- **Role:** Front-end Developer, UI/UX Designer  
 
 ---
 
