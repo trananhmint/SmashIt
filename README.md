@@ -9,15 +9,6 @@ Players can easily book courts, court owners can track revenue, and administrato
 - **Name:** Smash It  
 - **Timeline:** May – Dec 2024  
 - **Team size:** 4  
-
----
-
-## 🛠️ Responsibilities
-- Collaborated with teammates to refine requirements and deliver user-friendly solutions under tight deadlines.  
-- Developed **React Native features** for player court booking and owner revenue tracking.  
-- Integrated **RESTful APIs with Redux** for efficient state management and real-time synchronization.  
-- Designed and implemented **responsive UI/UX** for both mobile and web applications (Material UI, Ant Design).  
-
 ---
 
 ## ⚙️ Technology Stack
